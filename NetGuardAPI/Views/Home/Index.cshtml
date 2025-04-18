@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+
+    <input type="text" id="textfield" placeholder="Make predict" class="form-control" />
+    <button value="Predict" class="btn btn-primary" onclick="predict()">Predict</button>
+
+    <hr/>
+    <div id="preResult"></div>
+</div>
+
+@section Scripts{
+    <script>
+
+        function predict() {
+            
+            var resultDiv = document.getElementById("preResult");
+            resultDiv.innerHTML = "Predicting...";
+
+            const content = document.getElementById('textfield').value.trim();
+            
+            var url = "/api/SE/Predict?text=" + content;
+            alert(url);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    alert(JSON.stringify(data));
+                    const resultDiv = document.getElementById('preResult');
+                    resultDiv.innerHTML = data.prediction + "<br/>" + data.probability + "<br/>" + data.score;
+                })
+                .catch(error => console.error('Unable to get items.', error));
+        }
+    </script>
+}
+
