@@ -27,6 +27,13 @@ namespace NetGuardAPI.Controllers
             se.TrainingModel();
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult ImagePredict()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult ImgPredict()
         {

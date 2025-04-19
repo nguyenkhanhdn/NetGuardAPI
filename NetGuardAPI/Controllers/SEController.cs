@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace NetGuardAPI.Controllers
 {
@@ -7,6 +9,7 @@ namespace NetGuardAPI.Controllers
     public class SEController : ControllerBase
     {
         //api/SE/Predict?text=a
+        //[EnableCors("Policy1")]
         [HttpGet("Predict")]
         public async Task<ActionResult<SentimentPrediction>> Get(string text)
         {
@@ -20,7 +23,7 @@ namespace NetGuardAPI.Controllers
             {
                 sentimentEngine.TrainingModel();
                 prediction = sentimentEngine.Predict(text);
-                Console.WriteLine(fnf.Message);
+                Console.Write(fnf.Message);
             }
             return Ok(prediction);
         }
@@ -35,6 +38,7 @@ namespace NetGuardAPI.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+            
         }
 
         // PUT api/<SEController>/5

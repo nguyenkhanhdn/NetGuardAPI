@@ -22,14 +22,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                       
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="TextPredict">Text Predict</a>
+                            <a class="nav-link" href="#scrollspyHeading1">Net Guard for Kids API</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ImgPredict">Image Predict</a>
+                            <a class="nav-link" href="#scrollspyHeading2">Hướng dẫn sử dụng</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="TrainModel">Train Model</a>
+                            <a class="nav-link" href="~/Home/TrainModel">Huấn luyện mô hình</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Thử nghiệm</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="~/Home/TextPredict">Nhận diện văn bản</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="~/Home/imgPredict">Nhận diện hình ảnh</a></li>
+                                <li><a class="dropdown-item" href="#">Nhận diện video</a></li>
+                                <li><a class="dropdown-item" href="#">Nhận diện âm thanh</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
