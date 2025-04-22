@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NetGuardAPI.Models;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace NetGuardAPI.Controllers
 {
@@ -37,6 +38,46 @@ namespace NetGuardAPI.Controllers
         [HttpGet]
         public IActionResult VideoPredict()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult VideoPredict(string img_data)
+        {          
+            var fileName = "img" + DateTime.Now.ToString().Replace("/", "_").Replace(" ", "_").Replace(":", "") + ".png";
+            //Get url To Save
+            string SavePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", fileName);
+            string relativeImg2 = Path.Combine("uploads", fileName);
+
+            using (FileStream fs = new FileStream(SavePath, FileMode.Create))
+            {
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    byte[] data = Convert.FromBase64String(img_data);
+                    bw.Write(data);//Ghi xuống đĩa, lưu trong thư mục UploadedFiles
+                    bw.Close(); //Mở file thì có đóng file -> lỗi
+                }
+            }
+            var imageBytes = System.IO.File.ReadAllBytes(SavePath);
+            NetGaurd4KidMLModel.ModelInput modelInput = new NetGaurd4KidMLModel.ModelInput()
+            {
+                ImageSource = imageBytes,
+            };
+
+            //var sortedScoresWithLabel = ImgMLModel.Predict(sampleData);
+            var sortedScoresWithLabel = NetGaurd4KidMLModel.PredictAllLabels(modelInput);
+
+
+            var maxScoreLabel = sortedScoresWithLabel.OrderByDescending(x => x.Value).FirstOrDefault();
+            var result = new PredictResult
+            {
+                Prediction = maxScoreLabel.Key.ToString(),
+                Probability = maxScoreLabel.Value
+            };
+
+            ViewBag.Prediction = maxScoreLabel.Key.ToString();
+            ViewBag.Probability = maxScoreLabel.Value;
+
             return View();
         }
 

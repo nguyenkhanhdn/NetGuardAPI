@@ -8,7 +8,7 @@
     </h1>
     <h3>Select video</h3>
     <input type="file" id="fileInput" accept="video/*" onchange="playVideo()" />
-
+    <br/>
     <div class="camera">
         <video id="myvideo">Video stream not available.</video>
     </div>
@@ -17,6 +17,33 @@
     <div class="output">
         <img id="photo" alt="The screen capture will appear in this box.">
     </div>
+
+
+    <h2><p>@(ViewBag.Prediction != null ? ViewBag.Prediction : "Null value")</p></h2>
+    <h2>@(ViewBag.Probability != null ? ViewBag.Probability : "Null value")</h2>
+
+    @if (@ViewBag.Prediction != null)
+    {
+        if (@ViewBag.Prediction.Contains("porn"))
+        {
+            <strong>
+                Nội dung độc hại, bị nghiêm cấm.
+            </strong>
+        }
+        if (@ViewBag.Prediction.Contains("gore"))
+        {
+            <strong>
+                Nội dung độc hại, bị nghiêm cấm.
+            </strong>
+        }
+
+        if (@ViewBag.Prediction.Contains("control"))
+        {
+            <strong>
+                Nội dung hợp lệ, được phép upload.
+            </strong>
+        }
+    }
 </div>
 
 <style>
@@ -115,7 +142,22 @@
             context.drawImage(video, 0, 0, width, height);
 
             const dataURL = canvas.toDataURL('image/png');
+
+            alert(dataURL);
             photo.setAttribute('src', dataURL);
+
+            let imagebase64data = dataURL.replace('data:image/png;base64,', '');
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("VideoPredict", "Home")',
+                data: { img_data: imagebase64data },
+                dataType: 'text',
+                success: function (nhan) {
+
+                    alert(nhan);
+                }
+            });
         }
 
 
