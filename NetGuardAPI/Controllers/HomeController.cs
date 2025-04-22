@@ -35,6 +35,12 @@ namespace NetGuardAPI.Controllers
         }
 
         [HttpGet]
+        public IActionResult VideoPredict()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult ImgPredict()
         {
             return View();

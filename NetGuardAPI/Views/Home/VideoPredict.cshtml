@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Upload File qua API (.NET 8)";
+}
+
+<div class="contentarea">
+    <h1>
+        Javascript to capture Photo
+    </h1>
+    <h3>Select video</h3>
+    <input type="file" id="fileInput" accept="video/*" onchange="playVideo()" />
+
+    <div class="camera">
+        <video id="myvideo">Video stream not available.</video>
+    </div>
+    <div><button id="startbutton" onclick="takepicture()">Take photo</button></div>
+    <canvas id="canvas"></canvas>
+    <div class="output">
+        <img id="photo" alt="The screen capture will appear in this box.">
+    </div>
+</div>
+
+<style>
+    /* CSS comes here */
+    #video {
+        border: 1px solid black;
+        width: 640px;
+        height: 480px;
+    }
+
+    #photo {
+        border: 1px solid black;
+        width: 640px;
+        height: 480px;
+    }
+
+    #canvas {
+        display: none;
+    }
+
+    .camera {
+        width: 340px;
+        display: inline-block;
+    }
+
+    .output {
+        width: 340px;
+        display: inline-block;
+    }
+
+    #startbutton {
+        display: block;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 36px;
+        padding: 5px;
+        background-color: #6a67ce;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        color: rgba(255, 255, 255, 1.0);
+        cursor: pointer;
+    }
+
+    .contentarea {
+        font-size: 16px;
+        font-family: Arial;
+        text-align: center;
+    }
+</style>
+@section Scripts{
+    <script>
+        // function playVideo(){
+        //     const fileInput = document.getElementById('fileInput');
+        //     const video = document.getElementById('myvideo');
+        //     const file = fileInput.files[0];
+        //     const url = URL.createObjectURL(file);
+        //     video.src = url;
+        //     video.play();
+        // }
+
+        let video = document.getElementById('myvideo');
+        let canvas = document.getElementById('canvas');
+        let photo = document.getElementById('photo');
+        let width = 640;
+        let height = 0;
+
+        function playVideo() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const fileURL = URL.createObjectURL(file);
+            video.src = fileURL;
+
+            video.addEventListener('loadedmetadata', () => {
+                // Lấy chiều cao dựa trên tỉ lệ khung hình
+                height = video.videoHeight / (video.videoWidth / width);
+                video.width = width;
+                video.height = height;
+            });
+
+            video.play();
+        }
+
+        function takepicture() {
+            if (!width || !height) {
+                width = video.videoWidth;
+                height = video.videoHeight;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext('2d');
+
+            context.drawImage(video, 0, 0, width, height);
+
+            const dataURL = canvas.toDataURL('image/png');
+            photo.setAttribute('src', dataURL);
+        }
+
+
+    </script>
+}
